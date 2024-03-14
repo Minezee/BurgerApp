@@ -20,6 +20,11 @@ export default () => {
   const { search } = useLocation();
   const urlParams = new URLSearchParams(search);
   const doneParams = urlParams.get('done');
+  let totalHarga = 0;
+
+  burgerComponents.forEach((component) => {
+    totalHarga += component.price * component.quantity;
+  });
 
   const handleAddComponent = (index, name) => {
     if (orderList.length < 10) {
@@ -45,16 +50,16 @@ export default () => {
 
   return (
     <div className='relative'>
-      {doneParams && <Popup /> }
-      <OrderHeader burgerComponents={burgerComponents} handleReset={handleResetOrder}/>
+      {doneParams && <Popup resetPesanan={handleResetOrder} burgerComponents={burgerComponents} total={totalHarga}/> }
+      <OrderHeader total={totalHarga} handleReset={handleResetOrder}/>
       
       <div className='mt-20 w-full flex flex-col gap-10 items-center'>
         <div className='w-1/5 min-w-[300px] border border-green-600 py-10 rounded-lg flex flex-col items-center justify-center gap-1'>
-          <div className='w-[52%] h-8 rounded-t-full bg-orange-300'></div>
+          <div className='w-[52%] h-10 rounded-t-full bg-orange-300'></div>
           {orderList.map((ingredients, idx) => (
             <Ingredients key={ingredients + '-' + idx} type={ingredients} />
           ))}
-          <div className='w-[52%] h-8 rounded-b-full bg-orange-300'></div>
+          <div className='w-[52%] h-4 rounded-b-full bg-orange-300'></div>
         </div>
 
         <ComponentGroup burgerComponents={burgerComponents} handleAddComponent={handleAddComponent} />
